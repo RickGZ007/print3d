@@ -1,0 +1,196 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   index.css — Tokens de design globais do PRINT3D
+   Para mudar o tema inteiro: edite apenas as variáveis abaixo.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&family=Barlow+Condensed:wght@700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* ── ACENTO (mude aqui para trocar a cor principal do site) ────── */
+  --color-accent:          #f97316;   /* laranja — botões, ícones, destaques */
+  --color-accent-hover:    #fb923c;   /* hover dos botões */
+  --color-accent-muted:    rgba(249,115,22,0.12);
+  --color-accent-border:   rgba(249,115,22,0.30);
+
+  /* ── FUNDOS ────────────────────────────────────────────────────── */
+  --color-bg-page:         #030712;   /* fundo geral */
+  --color-bg-surface:      #111827;   /* cards, painéis */
+  --color-bg-surface-2:    #1f2937;   /* inputs, hover */
+  --color-bg-overlay:      rgba(0,0,0,0.70);
+
+  /* ── BORDAS ────────────────────────────────────────────────────── */
+  --color-border:          #1f2937;
+  --color-border-strong:   #374151;
+
+  /* ── TEXTOS ────────────────────────────────────────────────────── */
+  --color-text-primary:    #f9fafb;
+  --color-text-secondary:  #9ca3af;
+  --color-text-muted:      #4b5563;
+
+  /* ── NAVBAR ────────────────────────────────────────────────────── */
+  --color-navbar-bg:          rgba(3,7,18,0.95);
+  --color-navbar-link:        #9ca3af;
+  --color-navbar-link-hover:  #fb923c;
+  --color-navbar-logo-bg:     #f97316;
+  --color-navbar-logo-text:   #030712;
+
+  /* ── BOTÃO PRIMÁRIO (CTA) ──────────────────────────────────────── */
+  --color-btn-primary-bg:     #f97316;
+  --color-btn-primary-text:   #030712;
+  --color-btn-primary-hover:  #fb923c;
+
+  /* ── BOTÃO SECUNDÁRIO ──────────────────────────────────────────── */
+  --color-btn-secondary-bg:     #1f2937;
+  --color-btn-secondary-text:   #f9fafb;
+  --color-btn-secondary-border: #374151;
+
+  /* ── CARDS ─────────────────────────────────────────────────────── */
+  --color-card-bg:           #111827;
+  --color-card-border:       #1f2937;
+  --color-card-border-hover: rgba(249,115,22,0.45);
+  --color-card-shadow-hover: rgba(249,115,22,0.08);
+
+  /* ── BADGES DE CATEGORIA ───────────────────────────────────────── */
+  --color-badge-industrial-bg:    rgba(37,99,235,0.12);
+  --color-badge-industrial-text:  #60a5fa;
+  --color-badge-decoration-bg:    rgba(236,72,153,0.12);
+  --color-badge-decoration-text:  #f472b6;
+  --color-badge-prototype-bg:     rgba(124,58,237,0.12);
+  --color-badge-prototype-text:   #a78bfa;
+  --color-badge-medicine-bg:      rgba(22,163,74,0.12);
+  --color-badge-medicine-text:    #4ade80;
+  --color-badge-education-bg:     rgba(234,179,8,0.12);
+  --color-badge-education-text:   #facc15;
+
+  /* ── ADMIN ─────────────────────────────────────────────────────── */
+  --color-admin-sidebar-bg:           #111827;
+  --color-admin-sidebar-active-bg:    rgba(249,115,22,0.12);
+  --color-admin-sidebar-active-text:  #fb923c;
+  --color-admin-sidebar-active-border:rgba(249,115,22,0.30);
+  --color-admin-row-hover:            rgba(31,41,55,0.60);
+  --color-admin-action-edit:          #fb923c;
+  --color-admin-action-delete:        #f87171;
+
+  /* ── ESTADOS ───────────────────────────────────────────────────── */
+  --color-success:        #4ade80;
+  --color-success-bg:     rgba(74,222,128,0.10);
+  --color-success-border: rgba(74,222,128,0.30);
+  --color-error:          #f87171;
+  --color-error-bg:       rgba(248,113,113,0.10);
+  --color-error-border:   rgba(248,113,113,0.30);
+  --color-warning:        #facc15;
+
+  /* ── FORMULÁRIOS ───────────────────────────────────────────────── */
+  --color-input-bg:           #1f2937;
+  --color-input-border:       #374151;
+  --color-input-border-focus: #f97316;
+
+  /* ── FOOTER ────────────────────────────────────────────────────── */
+  --color-footer-bg:     #030712;
+  --color-footer-border: #1f2937;
+  --color-footer-text:   #4b5563;
+}
+
+/* ── BASE ───────────────────────────────────────────────────────── */
+@layer base {
+  :root {
+    font-family: 'Barlow', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
+    background-color: var(--color-bg-page);
+    color: var(--color-text-primary);
+  }
+  h1, h2 {
+    font-family: 'Barlow Condensed', 'Barlow', sans-serif;
+    font-weight: 900;
+    letter-spacing: -0.01em;
+  }
+  ::-webkit-scrollbar        { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track  { background: var(--color-bg-page); }
+  ::-webkit-scrollbar-thumb  { background: var(--color-border-strong); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-accent); }
+}
+
+/* ── COMPONENTS — classes reutilizáveis ─────────────────────────── */
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center gap-2 font-bold px-5 py-2.5 rounded-xl text-sm transition-all hover:scale-105 active:scale-95;
+    background-color: var(--color-btn-primary-bg);
+    color: var(--color-btn-primary-text);
+  }
+  .btn-primary:hover { background-color: var(--color-btn-primary-hover); }
+
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 font-medium px-5 py-2.5 rounded-xl text-sm transition-colors border;
+    background-color: var(--color-btn-secondary-bg);
+    color: var(--color-btn-secondary-text);
+    border-color: var(--color-btn-secondary-border);
+  }
+  .btn-secondary:hover { background-color: var(--color-bg-surface-2); }
+
+  .form-input {
+    @apply w-full rounded-lg px-3 py-2.5 text-sm transition-colors outline-none;
+    background-color: var(--color-input-bg);
+    border: 1px solid var(--color-input-border);
+    color: var(--color-text-primary);
+  }
+  .form-input::placeholder { color: var(--color-text-muted); }
+  .form-input:focus {
+    border-color: var(--color-input-border-focus);
+    box-shadow: 0 0 0 2px var(--color-accent-muted);
+  }
+
+  .form-label {
+    @apply block text-xs font-semibold uppercase tracking-wide mb-1.5;
+    color: var(--color-text-secondary);
+  }
+
+  .project-card {
+    @apply rounded-xl overflow-hidden flex flex-col transition-all duration-300;
+    background-color: var(--color-card-bg);
+    border: 1px solid var(--color-card-border);
+  }
+  .project-card:hover {
+    border-color: var(--color-card-border-hover);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px var(--color-card-shadow-hover);
+  }
+
+  .surface {
+    background-color: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    @apply rounded-2xl;
+  }
+
+  .alert-error {
+    @apply flex items-center gap-3 rounded-xl px-4 py-3 text-sm;
+    background-color: var(--color-error-bg);
+    border: 1px solid var(--color-error-border);
+    color: var(--color-error);
+  }
+
+  .alert-success {
+    @apply flex items-center gap-3 rounded-xl px-4 py-3 text-sm;
+    background-color: var(--color-success-bg);
+    border: 1px solid var(--color-success-border);
+    color: var(--color-success);
+  }
+}
+
+/* ── UTILITIES ──────────────────────────────────────────────────── */
+@layer utilities {
+  .line-clamp-1 { overflow:hidden; display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; }
+  .line-clamp-2 { overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+  .glow-accent  { background: radial-gradient(circle, var(--color-accent-muted) 0%, transparent 70%); }
+  .grid-bg {
+    background-image:
+      linear-gradient(var(--color-accent) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-accent) 1px, transparent 1px);
+    background-size: 60px 60px;
+    opacity: 0.04;
+  }
+}
