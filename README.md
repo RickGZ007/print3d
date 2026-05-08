@@ -228,3 +228,5 @@ src/
 **Cores não aparecem no site público**
 → Verifique se o SQL foi executado no Supabase e se as 12 cores foram inseridas.
 → Supabase → Table Editor → filaments → deve ter 12 linhas.
+
+
