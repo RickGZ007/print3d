@@ -5,6 +5,8 @@ import { useAuth } from "../context/AuthContext";
 import AdminSidebar from "../components/admin/AdminSidebar";
 import ProjectForm from "../components/ProjectForm";
 import MaterialsManager from "../components/admin/MaterialsManager";
+import MateriaisAdmin from "../components/admin/MateriaisAdmin";
+import SobreNosManager from "../components/admin/SobreNosManager";
 import { projetosApi } from "../services/api";
 import { resolveImageUrl } from "../services/imageUtils";
 
@@ -14,6 +16,13 @@ const BADGE = {
   Prototipagem: "bg-badge-prototype-bg  text-badge-prototype-text",
   Medicina:     "bg-badge-medicine-bg   text-badge-medicine-text",
   Educação:     "bg-badge-education-bg  text-badge-education-text",
+};
+
+const TAB_TITLES = {
+  projetos:  "Gerenciar Projetos",
+  materiais: "Materiais",
+  cores:     "Cores / Filamentos",
+  sobre:     "Sobre Nós",
 };
 
 export default function AdminDashboard() {
@@ -38,7 +47,7 @@ export default function AdminDashboard() {
     finally { setLoading(false); }
   }, []);
 
-  useEffect(() => { fetchProjetos(); }, [fetchProjetos]);
+  useEffect(() => { if (activeTab === "projetos") fetchProjetos(); }, [activeTab, fetchProjetos]);
 
   const abrirFormNovo = () => { setEditTarget(null); setFormOpen(true); setSaveError(""); };
   const abrirFormEdit = (p) => { setEditTarget(p);   setFormOpen(true); setSaveError(""); };
@@ -78,7 +87,7 @@ export default function AdminDashboard() {
       <main className="flex-1 flex flex-col overflow-hidden">
         <header className="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-border bg-surface/50">
           <div>
-            <h1 className="text-lg font-black text-primary">{activeTab === "projetos" ? "Gerenciar Projetos" : "Materiais & Cores"}</h1>
+            <h1 className="text-lg font-black text-primary">{TAB_TITLES[activeTab]}</h1>
             <p className="text-xs text-muted">Olá, {user?.email}</p>
           </div>
           <button onClick={handleLogout}
@@ -88,6 +97,8 @@ export default function AdminDashboard() {
         </header>
 
         <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+
+          {/* ── PROJETOS ── */}
           {activeTab === "projetos" && (
             <div className="flex flex-col gap-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -96,19 +107,14 @@ export default function AdminDashboard() {
                   <p className="text-xs text-muted">projetos</p>
                 </div>
                 <div className="flex gap-2">
-                  <button onClick={fetchProjetos} className="btn-secondary px-3 py-2.5" title="Atualizar">
-                    <RefreshCw className="w-4 h-4" />
-                  </button>
-                  <button onClick={abrirFormNovo} className="btn-primary">
-                    <Plus className="w-4 h-4" /> Novo projeto
-                  </button>
+                  <button onClick={fetchProjetos} className="btn-secondary px-3 py-2.5"><RefreshCw className="w-4 h-4" /></button>
+                  <button onClick={abrirFormNovo} className="btn-primary"><Plus className="w-4 h-4" /> Novo projeto</button>
                 </div>
               </div>
 
               {apiError && (
                 <div className="alert-error">
-                  <AlertCircle className="w-4 h-4" />
-                  <p className="flex-1">{apiError}</p>
+                  <AlertCircle className="w-4 h-4" /><p className="flex-1">{apiError}</p>
                   <button onClick={fetchProjetos} className="text-xs underline">Tentar novamente</button>
                 </div>
               )}
@@ -134,11 +140,10 @@ export default function AdminDashboard() {
                 {loading && (
                   <div className="flex items-center justify-center gap-3 py-16 text-secondary">
                     <Loader2 className="w-5 h-5 animate-spin text-accent" />
-                    <span className="text-sm">Carregando do Supabase...</span>
+                    <span className="text-sm">Carregando...</span>
                   </div>
                 )}
 
-                {/* Mobile */}
                 {!loading && (
                   <div className="sm:hidden divide-y divide-border">
                     {projetos.map((p) => (
@@ -159,7 +164,6 @@ export default function AdminDashboard() {
                   </div>
                 )}
 
-                {/* Desktop */}
                 {!loading && (
                   <div className="hidden sm:block overflow-x-auto">
                     <table className="w-full text-sm">
@@ -203,16 +207,27 @@ export default function AdminDashboard() {
                 {!loading && projetos.length === 0 && !apiError && (
                   <div className="py-16 text-center">
                     <ImageIcon className="w-10 h-10 text-muted mx-auto mb-3" />
-                    <p className="text-secondary text-sm">Nenhum projeto cadastrado ainda.</p>
-                    <button onClick={abrirFormNovo} className="mt-3 text-accent text-sm hover:underline">Adicionar o primeiro projeto</button>
+                    <p className="text-secondary text-sm">Nenhum projeto cadastrado.</p>
+                    <button onClick={abrirFormNovo} className="mt-3 text-accent text-sm hover:underline">Adicionar o primeiro</button>
                   </div>
                 )}
               </div>
             </div>
           )}
 
+          {/* ── MATERIAIS (CRUD) ── */}
           {activeTab === "materiais" && (
+            <div className="surface p-6"><MateriaisAdmin /></div>
+          )}
+
+          {/* ── CORES / FILAMENTOS ── */}
+          {activeTab === "cores" && (
             <div className="surface p-6"><MaterialsManager /></div>
+          )}
+
+          {/* ── SOBRE NÓS ── */}
+          {activeTab === "sobre" && (
+            <div className="surface p-6"><SobreNosManager /></div>
           )}
         </div>
       </main>
@@ -224,7 +239,7 @@ export default function AdminDashboard() {
             <p className="text-secondary text-sm mb-6">Tem certeza? Esta ação não pode ser desfeita.</p>
             <div className="flex gap-3">
               <button onClick={executarDelete} disabled={deleting}
-                className="flex-1 flex items-center justify-center gap-2 bg-error hover:bg-error/80 disabled:opacity-50 text-white font-bold py-2.5 rounded-xl text-sm transition-colors">
+                className="flex-1 flex items-center justify-center gap-2 bg-error hover:bg-error/80 disabled:opacity-50 text-white font-bold py-2.5 rounded-xl text-sm">
                 {deleting && <Loader2 className="w-4 h-4 animate-spin" />}{deleting ? "Excluindo..." : "Sim, excluir"}
               </button>
               <button onClick={() => setDeleteId(null)} disabled={deleting} className="btn-secondary flex-1 justify-center">Cancelar</button>

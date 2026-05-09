@@ -1,16 +1,17 @@
-import { LayoutGrid, Palette, LogOut, Printer, ExternalLink } from "lucide-react";
+import { LayoutGrid, Palette, LogOut, Printer, ExternalLink, Info, Layers } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const navItems = [
   { id: "projetos",  label: "Projetos",         icon: LayoutGrid },
-  { id: "materiais", label: "Materiais & Cores", icon: Palette    },
+  { id: "materiais", label: "Materiais",         icon: Layers     },
+  { id: "cores",     label: "Cores / Filamentos",icon: Palette    },
+  { id: "sobre",     label: "Sobre Nós",         icon: Info       },
 ];
 
 export default function AdminSidebar({ activeTab, onTabChange }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-
   const handleLogout = async () => { await logout(); navigate("/admin/login"); };
 
   return (
@@ -25,10 +26,10 @@ export default function AdminSidebar({ activeTab, onTabChange }) {
         </span>
       </div>
 
-      <nav className="flex md:flex-col flex-row flex-1 p-2 md:p-3 gap-1">
+      <nav className="flex md:flex-col flex-row flex-1 p-2 md:p-3 gap-1 overflow-x-auto md:overflow-x-visible">
         {navItems.map(({ id, label, icon: Icon }) => (
           <button key={id} onClick={() => onTabChange(id)}
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium w-full text-left transition-all border ${
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium w-full text-left transition-all border flex-shrink-0 ${
               activeTab === id
                 ? "bg-admin-active-bg text-admin-active-text border-admin-active-border"
                 : "text-secondary hover:bg-surface2 hover:text-primary border-transparent"

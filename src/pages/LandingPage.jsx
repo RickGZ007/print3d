@@ -2,10 +2,9 @@ import { useState, useEffect } from "react";
 import { Crosshair, Layers, Zap, Upload, CheckCircle, Printer, MessageCircle, Mail, ChevronRight, Star } from "lucide-react";
 import Navbar from "../components/Navbar";
 import ProjectCard from "../components/ProjectCard";
-import { MATERIAIS } from "../data/mockData";
-import { projetosApi, coresApi } from "../services/api";
+import { projetosApi, coresApi, materiaisApi, configApi } from "../services/api";
 
-const WHATSAPP_NUMBER = "5541999999999"; // ← Troque pelo número real
+const WHATSAPP_NUMBER = "5541999999999";
 const WHATSAPP_MSG    = "Olá! Gostaria de solicitar um orçamento.";
 const whatsappUrl     = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MSG)}`;
 const TODAS = "Todos";
@@ -32,12 +31,21 @@ const PASSOS = [
 export default function LandingPage() {
   const [projetos,        setProjetos]        = useState([]);
   const [cores,           setCores]           = useState([]);
+  const [materiais,       setMateriais]       = useState([]);
+  const [sobreTitulo,     setSobreTitulo]     = useState("Feitos para fazer");
+  const [sobreTexto,      setSobreTexto]      = useState("");
   const [loadingProjetos, setLoadingProjetos] = useState(true);
   const [categoriaAtiva,  setCategoriaAtiva]  = useState(TODAS);
 
   useEffect(() => {
+    // Carrega tudo em paralelo
     projetosApi.listar().then(setProjetos).catch(console.error).finally(() => setLoadingProjetos(false));
     coresApi.listar().then(setCores).catch(console.error);
+    materiaisApi.listarAtivos().then(setMateriais).catch(console.error);
+    configApi.getMultiple(["sobre_titulo", "sobre_texto"]).then((data) => {
+      if (data.sobre_titulo) setSobreTitulo(data.sobre_titulo);
+      if (data.sobre_texto)  setSobreTexto(data.sobre_texto);
+    }).catch(console.error);
   }, []);
 
   const categorias       = [TODAS, ...new Set(projetos.map((p) => p.categoria))];
@@ -128,30 +136,37 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* MATERIAIS */}
+      {/* MATERIAIS — vêm do Supabase, só os ativos */}
       <section id="materiais" className="py-24 bg-surface/40 border-t border-border/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12">
             <p className="text-accent text-sm font-semibold uppercase tracking-widest mb-2">Materiais</p>
             <h2 className="text-4xl sm:text-5xl font-black text-primary mb-4">O material certo para cada projeto</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-            {MATERIAIS.map((mat) => (
-              <div key={mat.nome} className="surface p-6 hover:border-accent/30 transition-colors">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-3xl font-black text-primary">{mat.nome}</h3>
-                  <span className="text-xs bg-accent-muted text-accent border border-accent/20 px-2 py-1 rounded-full font-semibold">{mat.destaque}</span>
+          {materiais.length === 0 ? (
+            <p className="text-secondary text-sm">Nenhum material cadastrado ainda.</p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+              {materiais.map((mat) => (
+                <div key={mat.id} className="surface p-6 hover:border-accent/30 transition-colors">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-3xl font-black text-primary">{mat.nome}</h3>
+                    {mat.destaque && (
+                      <span className="text-xs bg-accent-muted text-accent border border-accent/20 px-2 py-1 rounded-full font-semibold">{mat.destaque}</span>
+                    )}
+                  </div>
+                  <p className="text-sm text-secondary mb-5 leading-relaxed">{mat.descricao}</p>
+                  <div className="flex flex-col gap-2.5">
+                    {["resistencia","acabamento","facilidade","flexibilidade"].map((prop) => (
+                      <PropBar key={prop} label={prop.charAt(0).toUpperCase()+prop.slice(1)} valor={mat[prop]} />
+                    ))}
+                  </div>
                 </div>
-                <p className="text-sm text-secondary mb-5 leading-relaxed">{mat.descricao}</p>
-                <div className="flex flex-col gap-2.5">
-                  {Object.entries(mat.propriedades).map(([key, val]) => (
-                    <PropBar key={key} label={key} valor={val} />
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-          {/* Cores do Supabase */}
+              ))}
+            </div>
+          )}
+
+          {/* Cores */}
           <div>
             <h3 className="text-xl font-bold text-primary mb-4">Cores disponíveis em estoque</h3>
             <div className="flex flex-wrap gap-3">
@@ -190,14 +205,12 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* SOBRE */}
+      {/* SOBRE — texto editável pelo admin */}
       <section id="sobre" className="py-24 bg-surface/40 border-t border-border/50">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-accent text-sm font-semibold uppercase tracking-widest mb-2">Sobre nós</p>
-          <h2 className="text-4xl font-black text-primary mb-6">Feitos para fazer</h2>
-          <p className="text-secondary leading-relaxed text-lg mb-10">
-            Somos uma empresa especializada em impressão 3D FDM de alta qualidade, atendendo desde makers e designers até indústrias que precisam de peças funcionais de precisão.
-          </p>
+          <h2 className="text-4xl font-black text-primary mb-6">{sobreTitulo}</h2>
+          <p className="text-secondary leading-relaxed text-lg mb-10">{sobreTexto}</p>
           <a href={whatsappUrl} target="_blank" rel="noopener noreferrer"
             className="btn-primary text-base px-8 py-4 shadow-lg shadow-accent/30">
             <MessageCircle className="w-5 h-5" /> Fale com a gente no WhatsApp
