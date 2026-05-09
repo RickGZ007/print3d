@@ -4,7 +4,7 @@ import { Menu, X, MessageCircle } from "lucide-react";
 // IMPORTAÇÃO DA LOGO
 import logo from "../assets/logo.jpg";
 
-const WHATSAPP_NUMBER = "5541999999999";
+const WHATSAPP_NUMBER = "5541997993826";
 
 const WHATSAPP_MSG =
   "Olá! Gostaria de solicitar um orçamento de impressão 3D.";
@@ -87,7 +87,7 @@ export default function Navbar() {
           </nav>
 
           {/* BOTÃO WHATSAPP */}
-          <a
+         {/* <a
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
@@ -96,7 +96,8 @@ export default function Navbar() {
             <MessageCircle className="w-4 h-4" />
             Solicitar Orçamento
           </a>
-
+          */} 
+          
           {/* BOTÃO MENU MOBILE */}
           <button
             className="md:hidden text-secondary hover:text-primary p-2"
