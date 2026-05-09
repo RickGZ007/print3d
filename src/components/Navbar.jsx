@@ -132,7 +132,7 @@ export default function Navbar() {
             </a>
           ))}
 
-          <a
+         {/* <a
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
@@ -141,7 +141,8 @@ export default function Navbar() {
             <MessageCircle className="w-4 h-4" />
             Solicitar Orçamento
           </a>
-
+          */}
+          
         </div>
       </div>
     </header>
