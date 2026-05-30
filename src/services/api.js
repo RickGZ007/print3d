@@ -14,11 +14,13 @@ export const projetosApi = {
     throwIfError(res); return res.data;
   },
   async criar(dados) {
-    const res = await supabase.from("projects").insert(dados).select().single();
+    const { id: _, ...dadosSemId } = dados;
+    const res = await supabase.from("projects").insert(dadosSemId).select().single();
     throwIfError(res); return res.data;
   },
   async atualizar(id, dados) {
-    const res = await supabase.from("projects").update(dados).eq("id", id).select().single();
+    const { id: _, ...dadosSemId } = dados;
+    const res = await supabase.from("projects").update(dadosSemId).eq("id", id).select().single();
     throwIfError(res); return res.data;
   },
   async excluir(id) {
@@ -41,22 +43,22 @@ export const coresApi = {
 
 // ── MATERIAIS ─────────────────────────────────────────────────────────────────
 export const materiaisApi = {
-  // Lista todos (admin vê inativos também, público só vê ativos via LandingPage)
   async listar() {
     const res = await supabase.from("materials").select("*").order("id");
     throwIfError(res); return res.data;
   },
-  // Lista só os ativos (para o site público)
   async listarAtivos() {
     const res = await supabase.from("materials").select("*").eq("ativo", true).order("id");
     throwIfError(res); return res.data;
   },
   async criar(dados) {
-    const res = await supabase.from("materials").insert(dados).select().single();
+    const { id: _, ...dadosSemId } = dados;
+    const res = await supabase.from("materials").insert(dadosSemId).select().single();
     throwIfError(res); return res.data;
   },
   async atualizar(id, dados) {
-    const res = await supabase.from("materials").update(dados).eq("id", id).select().single();
+    const { id: _, ...dadosSemId } = dados;
+    const res = await supabase.from("materials").update(dadosSemId).eq("id", id).select().single();
     throwIfError(res); return res.data;
   },
   async excluir(id) {
@@ -71,20 +73,16 @@ export const materiaisApi = {
 
 // ── CONFIGURAÇÕES DO SITE ─────────────────────────────────────────────────────
 export const configApi = {
-  // Busca um valor pela chave (ex: "sobre_titulo")
   async get(key) {
     const res = await supabase.from("site_config").select("value").eq("key", key).single();
     if (res.error) return null;
     return res.data.value;
   },
-  // Busca múltiplas chaves de uma vez
   async getMultiple(keys) {
     const res = await supabase.from("site_config").select("key, value").in("key", keys);
     throwIfError(res);
-    // Retorna objeto { chave: valor }
     return Object.fromEntries(res.data.map((r) => [r.key, r.value]));
   },
-  // Salva ou atualiza (upsert = insert se não existe, update se existe)
   async set(key, value) {
     const res = await supabase.from("site_config")
       .upsert({ key, value, updated_at: new Date().toISOString() }, { onConflict: "key" })

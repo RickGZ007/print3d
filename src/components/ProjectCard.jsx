@@ -22,10 +22,13 @@ export default function ProjectCard({ projeto }) {
 
   return (
     <article className="project-card group">
-      <div className="relative overflow-hidden aspect-video bg-surface2">
-        <img src={imagemUrl} alt={projeto.titulo}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          loading="lazy" referrerPolicy="no-referrer" />
+      <div className="relative overflow-hidden aspect-[4/3] bg-surface2">
+        <img
+          src={imagemUrl}
+          alt={projeto.titulo}
+          className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+          loading="lazy"
+        />
         <span className={`absolute top-3 left-3 text-xs font-semibold px-2 py-1 rounded ${BADGE[projeto.categoria] || "bg-surface2 text-secondary"}`}>
           {projeto.categoria}
         </span>
