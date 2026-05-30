@@ -64,9 +64,9 @@ export default function Navbar() {
               className="h-14 w-auto object-contain rounded-xl"
             />
 
-            <span className="font-black text-lg text-primary tracking-tight">
-              Studiogc<span className="text-accent">3D</span>
-            </span>
+           <span className="font-black text-lg text-primary tracking-tight">
+            Studio GC <span className="text-accent">3D</span>
+           </span>
 
           </a>
 

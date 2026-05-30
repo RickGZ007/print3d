@@ -99,7 +99,7 @@ function WhatsAppCard() {
 
 const PASSOS = [
   { icon: Upload,      titulo: "Envie seu arquivo",   desc: "STL, OBJ ou STEP. Aceitamos projetos prontos ou ajudamos a criar." },
-  { icon: Layers,      titulo: "Escolha o material",  desc: "PLA, ABS, PETG e mais. Consultoria gratuita incluída." },
+  { icon: Layers,      titulo: "Escolha o material",  desc: "Material será escolhido conforme a necessidade do projeto. Ex: Se enfeite será PLA, projeto que demandam a utilização em lugares mais quentes como cozinha ou carro será usado PETG ou ABS." },
   { icon: CheckCircle, titulo: "Receba o orçamento",  desc: "Resposta em até 24h com prazo e valor exatos." },
   { icon: Printer,     titulo: "Impressão & entrega", desc: "Produção rápida com controle de qualidade antes do envio." },
 ];
@@ -137,15 +137,15 @@ export default function LandingPage() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 bg-accent-muted border border-accent/30 rounded-full px-3 py-1 text-xs font-semibold text-accent mb-6">
-              <Star className="w-3 h-3 fill-accent" /> Impressão 3D profissional com entrega rápida
+              <Star className="w-3 h-3 fill-accent" /> Impressão 3D profissional
             </div>
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.05] tracking-tight mb-6">
               Transformamos suas{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-accent-hover">ideias digitais</span>{" "}
-              em realidade física.
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-accent-hover">Ideias</span>{" "}
+              em realidade
             </h1>
             <p className="text-lg text-secondary mb-10 max-w-xl leading-relaxed">
-              Do arquivo ao objeto: impressão 3D de alta precisão para indústria, prototipagem e design.
+              Do arquivo ao objeto: Impressão 3D de alta qualidade e precisão para a indústria, prototipagem, design, decoração, chaveiros e brinquedos.
             </p>
             <div className="flex flex-wrap gap-3">
               <a href={whatsappUrl} target="_blank" rel="noopener noreferrer"
